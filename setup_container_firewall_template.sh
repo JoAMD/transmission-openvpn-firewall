@@ -71,6 +71,10 @@ echo "[$(date)] Allowed all traffic through tun0" | tee -a "$LOG_PATH"
 iptables -A OUTPUT -d x.x.x.x/x -j ACCEPT
 echo "[$(date)] Allowed outbound traffic to local IP range" | tee -a "$LOG_PATH"
 
+# Allow traffic to Docker's default bridge network
+iptables -A OUTPUT -d 172.x.x.x/24 -j ACCEPT
+echo "[$(date)] Allowed outbound traffic to Docker's default bridge network (172.x.x.x/24)" | tee -a "$LOG_PATH"
+
 # =============================
 # Final DROP Rule
 # =============================
