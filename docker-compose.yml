@@ -1,0 +1,29 @@
+services:
+    transmission-openvpn:
+        cap_add:
+            - NET_ADMIN
+        volumes:
+            - '/path/to/downloads/:/data'
+            - '/path/to/config/:/config'
+            - './setup_container_firewall.sh:/usr/local/bin/setup_container_firewall.sh' # Mount the script
+        environment:
+            - PUID=
+            - PGID=
+            - OPENVPN_PROVIDER=
+            - OPENVPN_CONFIG=
+            - OPENVPN_USERNAME=
+            - OPENVPN_PASSWORD=
+            - LOCAL_NETWORK=
+            - TRANSMISSION_RPC_USERNAME=
+            - TRANSMISSION_RPC_PASSWORD=
+            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
+        ports:
+            - '9091:9091'
+        image: haugene/transmission-openvpn
+        entrypoint: ["/usr/local/bin/setup_container_firewall.sh"] # Set the script as the entrypoint
+        command: ["dumb-init", "/etc/openvpn/start.sh"] # copied from haugene/transmission-openvpn dockerfile
+
